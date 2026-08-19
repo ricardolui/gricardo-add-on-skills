@@ -30,10 +30,11 @@ These skills empower AI coding assistants (Google Antigravity, Gemini CLI, Claud
 
 ---
 
-### 🧊 Lakehouse & BigQuery Development
-
+### 🧊 Lakehouse, BigQuery & Conversational Analytics
+ 
 | Skill | Description | Key Features |
 | :--- | :--- | :--- |
+| **[`bigquery-conversational-agent-builder`](bigquery-conversational-agent-builder/SKILL.md)** | BigQuery Conversational Data Agents & Golden Queries | Architectural standard for provisioning Gemini Data Analytics agents grounded in BigQuery Property Graphs (`GRAPH_EXPAND` + `AGG` measures), 10-archetype Golden Queries with dry-run auto-healing, SDUI chart triggers, and Gemini Enterprise Discovery Engine A2A OAuth 1:1 federation. |
 | **[`google-iceberg-spark-bigquery`](google-iceberg-spark-bigquery/SKILL.md)** | Lakehouse Integration: Iceberg, Spark & BigQuery | Implements Google Cloud Lakehouse architecture using Lakehouse Iceberg REST Catalogs via Credential Vending with Dataproc Serverless (Spark Connect) and BigQuery DML / Table Management. |
 | **[`gcp-bigquery-notebook-uploader`](gcp-bigquery-notebook-uploader/SKILL.md)** | Notebook Dataform Uploader & Colab Emulator | Programmatic Python CLI to upload and commit Jupyter Notebooks (`.ipynb`) into Dataform repositories, instantly making them native code assets in BigQuery Studio & Colab Enterprise. |
 | **[`gcp-dataform-deployment`](gcp-dataform-deployment/SKILL.md)** | Dataform REST Deployment & Act-As IAM Orchestration | Programmatic REST API workflow for workspace management, code compilation, execution orchestration, and resolving strict IAM Act-As permissions. |
