@@ -49,6 +49,8 @@ def validate_agent_payload(payload: dict) -> list[str]:
     
     if not has_graph and not has_tables:
         errors.append("Must provide either 'propertyGraphReferences' or 'tableReferences' in datasourceReferences.bq")
+    elif has_graph and has_tables:
+        errors.append("CRITICAL VIOLATION: Mutually exclusive datasources. When 'propertyGraphReferences' is provided, 'tableReferences' MUST NOT be present. Remove 'tableReferences' to enforce pure Property Graph grounding.")
         
     if has_graph:
         for idx, ref in enumerate(bq_ds["propertyGraphReferences"]):

@@ -1,0 +1,23 @@
+{
+  "type": "DATA_DISCOVERY",
+  "description": "Dataplex Cloud Storage Discovery Scan for automated metadata curation, schema inference, and BigLake cataloging",
+  "data": {
+    "resource": "//storage.googleapis.com/projects/${PROJECT_ID}/buckets/${BUCKET_NAME}"
+  },
+  "executionSpec": {
+    "trigger": {
+      "onDemand": {}
+    }
+  },
+  "dataDiscoverySpec": {
+    "bigqueryPublishingConfig": {
+      "tableType": "BIGLAKE",
+      "connection": "projects/${PROJECT_ID}/locations/${REGION}/connections/${CONNECTION_ID}"
+    },
+    "storageConfig": {
+      "unstructuredDataOptions": {
+        "semanticInferenceEnabled": true
+      }
+    }
+  }
+}

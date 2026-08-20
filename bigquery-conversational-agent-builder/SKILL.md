@@ -52,25 +52,26 @@ The Conversational Analytics API operates strictly on a **read-only** paradigm (
 ### 3.1. The 3-Tier Auto-Discovery Protocol
 Whenever provisioning or configuring a BigQuery Conversational Agent, always follow this discovery hierarchy:
 
-1. **Tier 1 (Default - Property Graph Auto-Discovery)**:
+1. **Tier 1 (Default - Pure Property Graph Grounding)**:
    - Query `INFORMATION_SCHEMA.PROPERTY_GRAPHS` in the target dataset (`datasetId`):
      ```sql
      SELECT property_graph_name, ddl 
      FROM `{projectId}.{datasetId}.INFORMATION_SCHEMA.PROPERTY_GRAPHS` 
      LIMIT 10;
      ```
-   - If a Property Graph exists, bind it directly as `datasourceReferences.bq.propertyGraphReferences`.
+   - If a Property Graph exists, bind it **exclusively** as `datasourceReferences.bq.propertyGraphReferences`.
+   - **MANDATORY EXCLUSIVITY**: Do **NOT** pass `tableReferences` when `propertyGraphReferences` is present! Passing both dilutes the knowledge source in the Gemini Data Analytics console and causes the UI to render individual relational tables instead of the unified property graph.
    - Run data profiling over `GRAPH_EXPAND` to discover flattened dimensions and measures.
 
 2. **Tier 2 (Dataform SQLX DDL Extraction)**:
    - If `INFORMATION_SCHEMA` is not yet populated or running during build-time, extract the Property Graph DDL directly from the Dataform Gold SQLX definitions (`CREATE OR REPLACE PROPERTY GRAPH ...`).
 
-3. **Tier 3 (Strict Fallback - Relational Tables)**:
+3. **Tier 3 (Strict Fallback - Relational Tables Only When No Graph Exists)**:
    - **Only** if no Property Graph exists in the dataset or codebase, fall back to binding individual tables via `tableReferences`.
 
 ### 3.2. `datasourceReferences` Payload Comparison
 
-#### ✅ Priority 1 (Default): Property Graph Reference
+#### ✅ Priority 1 (Default): Pure Property Graph Reference (NO tableReferences)
 ```json
 {
   "datasourceReferences": {
@@ -87,7 +88,7 @@ Whenever provisioning or configuring a BigQuery Conversational Agent, always fol
 }
 ```
 
-#### ⚠️ Fallback Only: Disconnected Relational Tables
+#### ⚠️ Strict Fallback Only: Disconnected Relational Tables (ONLY when NO Property Graph exists)
 ```json
 {
   "datasourceReferences": {
@@ -100,6 +101,7 @@ Whenever provisioning or configuring a BigQuery Conversational Agent, always fol
   }
 }
 ```
+
 
 ### 3.3. GoogleSQL GQL Syntax & Measure Rules
 1. **GoogleSQL GQL Only**: Standalone `GRAPH \`project.dataset.graph\` MATCH ... RETURN ... ORDER BY ... LIMIT 10` or relational `SELECT ... FROM GRAPH_TABLE(\`project.dataset.graph\` MATCH (...) COLUMNS (...))`. Never generate Cypher or openCypher.
